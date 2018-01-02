@@ -1,0 +1,13 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: node-role-binding
+subjects:
+- kind: ServiceAccount
+  name: px-account
+  namespace: kube-system
+  apiVersion: v1
+roleRef:
+  kind: ClusterRole
+  name: node-get-put-list-role
+  apiGroup: rbac.authorization.k8s.io

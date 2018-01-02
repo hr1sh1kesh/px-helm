@@ -1,0 +1,95 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: portworx
+  namespace: kube-system
+spec:
+  minReadySeconds: 0
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        name: portworx
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: px/enabled
+                operator: NotIn
+                values:
+                - "false"
+              - key: node-role.kubernetes.io/master
+                operator: DoesNotExist
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: portworx
+          image: portworx/oci-monitor:1.2.12.0
+          terminationMessagePath: "/tmp/px-termination-log"
+          imagePullPolicy: Always
+          args:
+            ["-k", "etcd:http://etc.fake.net:2379", "-c", "test_cluster", "-a", "-f", 
+             "-x", "kubernetes"]
+          env:
+            - name: "PX_TEMPLATE_VERSION"
+              value: "v2"
+            
+          livenessProbe:
+            periodSeconds: 30
+            initialDelaySeconds: 840 # allow image pull in slow networks
+            httpGet:
+              host: 127.0.0.1
+              path: /status
+              port: 9001
+          readinessProbe:
+            periodSeconds: 10
+            httpGet:
+              host: 127.0.0.1
+              path: /health
+              port: 9015
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+            - name: kubelet
+              mountPath: /var/lib/kubelet:shared
+            - name: libosd
+              mountPath: /var/lib/osd:shared
+            - name: etcpwx
+              mountPath: /etc/pwx
+            - name: optpwx
+              mountPath: /opt/pwx
+            - name: proc1nsmount
+              mountPath: /host_proc/1/ns
+            - name: sysdmount
+              mountPath: /etc/systemd/system
+      restartPolicy: Always
+      serviceAccountName: px-account
+      volumes:
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+        - name: kubelet
+          hostPath:
+            path: /var/lib/kubelet
+        - name: libosd
+          hostPath:
+            path: /var/lib/osd
+        - name: etcpwx
+          hostPath:
+            path: /etc/pwx
+        - name: optpwx
+          hostPath:
+            path: /opt/pwx
+        - name: proc1nsmount
+          hostPath:
+            path: /proc/1/ns
+        - name: sysdmount
+          hostPath:
+            path: /etc/systemd/system
