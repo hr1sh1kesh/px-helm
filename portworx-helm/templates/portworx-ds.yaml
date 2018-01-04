@@ -11,13 +11,13 @@ metadata:
 spec:
   minReadySeconds: 0
    
-  {{- if eq .Values.px.deploymentType | upper | lower | oci }}
+  {{- if eq (.Values.px.deploymentType | upper | lower) "oci" }}
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
       maxUnavailable: 1
   
-  {{- else if eq .Values.px.deploymentType | upper | lower | docker }}
+  {{- else if eq (.Values.px.deploymentType | upper | lower) "docker" }}
   updateStrategy:
     type: OnDelete
   
@@ -47,10 +47,10 @@ spec:
       containers:
         - name: portworx
 
-          {{- if eq .Values.px.deploymentType | upper | lower | oci }}
+          {{- if eq (.Values.px.deploymentType | upper | lower) "oci" }}
           image: portworx/oci-monitor:{{ required  "A valid Image tag. Should be in the SemVer format" .Values.px.imageTag }}
 
-          {{- else if eq .Values.px.deploymentType | upper | lower | docker }}
+          {{- else if eq (.Values.px.deploymentType | upper | lower) "docker" }}
           image: portworx/px-enterprise:{{ required "A valid Image tag. Should be in the SemVer format" .Values.px.imageTag }}
 
           {{- end }}          
@@ -105,11 +105,11 @@ spec:
             httpGet:
               host: 127.0.0.1
   
-              {{- if eq .Values.px.deploymentType | upper | lower | oci }}
+              {{- if eq (.Values.px.deploymentType | upper | lower) "oci" }}
               path: /health
               port: 9015
   
-              {{- else if eq .Values.px.deploymentType | upper | lower | docker }}
+              {{- else if eq (.Values.px.deploymentType | upper | lower) "docker" }}
               path: /v1/cluster/nodehealth
               port: 9001
   
@@ -126,7 +126,7 @@ spec:
             - name: etcpwx
               mountPath: /etc/pwx
 
-          {{- if eq .Values.px.deploymentType | upper | lower | oci }}
+          {{- if eq (.Values.px.deploymentType | upper | lower) "oci" }}
             - name: optpwx
               mountPath: /opt/pwx
             - name: proc1nsmount
@@ -134,7 +134,7 @@ spec:
             - name: sysdmount
               mountPath: /etc/systemd/system
 
-          {{- else if eq .Values.px.deploymentType | upper | lower | docker }}
+          {{- else if eq (.Values.px.deploymentType | upper | lower) "docker" }}
             - name: optpwx
               mountPath: /export_bin
             - name: dev
@@ -164,7 +164,7 @@ spec:
           hostPath:
             path: /etc/pwx
         
-        {{- if eq .Values.px.deploymentType | upper | lower | oci }}
+        {{- if eq (.Values.px.deploymentType | upper | lower) "oci" }}
         - name: optpwx
           hostPath:
             path: /opt/pwx
@@ -175,7 +175,7 @@ spec:
           hostPath:
             path: /etc/systemd/system
 
-        {{- else if eq .Values.px.deploymentType | upper | lower | docker }}
+        {{- else if eq (.Values.px.deploymentType | upper | lower) "docker" }}
         - name: optpwx
           hostPath:
             path: /opt/pwx/bin
