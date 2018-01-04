@@ -5,6 +5,9 @@ px:
   installOptions: 
     etcd:                               # The ETCD endpoint. Should be in the format etcd:http://<your-etcd-endpoint>:2379
     clusterName: mycluster              # This is the default. please change it to your cluster name.  
+    runOnMaster: false                  # Instructs Portworx to be run on the kubernetes master as well. Defaults to false.  
+    zeroStorage: false                  # true/false Instructs PX to run in Zero Storage mode. 
+    usefileSystemDrive: false           # true/false Instructs PX to use an unmounted Drive even if it has a filesystem.
 
 # Below options are supported other than the defaults. 
 # Please uncomment and specify values for these options as per your requirements.      
@@ -12,9 +15,7 @@ px:
     #drives:                             # Comma seperated list of drives. Will be defaulted to null if there are no values
     #dataInterface:                      # Name of the interface <ethX>
     #managementInterface:                # Name of the interface <ethX>
-    #zeroStorage: false                  # true/false Instructs PX to run in Zero Storage mode. 
-    #usefileSystemDrive: false           # true/false Instructs PX to use an unmounted Drive even if it has a filesystem.
-
+     
 
 # TODO
 # KVDB Options. 

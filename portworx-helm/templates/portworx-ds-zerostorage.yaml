@@ -1,4 +1,6 @@
-#Setting defaults if they are omitted. 
+#Only if Zerostorage is true. 
+{{- if .Values.px.InstallOptions.zeroStorage && eq .Values.px.InstallOptions.zeroStorage true}}
+
 {{ .Values.px.installOptions.runOnMaster | default false}}
 {{ .Values.px.installOptions.zeroStorage | default false}}
 {{ .Values.px.installOptions.usefileSystemDrive | default false}}
@@ -6,11 +8,11 @@
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
-  name: portworx
+  name: portworx-zerostorage
   namespace: kube-system
 spec:
   minReadySeconds: 0
-   
+  
   {{- if eq .Values.px.deploymentType | upper | lower | oci }}
   updateStrategy:
     type: RollingUpdate
@@ -25,19 +27,21 @@ spec:
   template:
     metadata:
       labels:
-        app: portworx
+        app:  portworx-zerostorage
         name: portworx
       namespace: kube-system
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Equal
+        effect: NoSchedule
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-            {{- if eq .Values.px.installOptions.runOnMaster false }}
               - key: node-role.kubernetes.io/master
-                operator: DoesNotExist
-            {{- end }}
+                operator: Exists
               - key: px/enabled
                 operator: NotIn
                 values:
@@ -61,9 +65,9 @@ spec:
           {{- with .Values.px.installOptions }}
             [
               "-k", 
-              "{{ required "A valid ETCD url in the format etcd:http://<your-etcd-endpoint>:2379 is required" .etcd }}", 
+              "{{ required .etcd }}", 
               "-c", 
-              "{{ required "Clustername cannot be empty" .clusterName }}", 
+              "{{ required .clusterName }}", 
 
               {{- if .dataInterface }}
               "-d",
@@ -75,16 +79,7 @@ spec:
               "{{ .managementInterface }}",
               {{- end }}
 
-              {{- if .drives  }}
-              "-s",
-              "{{ .drives }}"
-              {{- else  }}
-              "-A",
-              {{- end }}
-
-              {{- if eq .usefileSystemDrive true }}
-              "-f",               
-              {{- end }}
+              "-z",
               "-x",
               "kubernetes"
              ]
@@ -195,3 +190,4 @@ spec:
           hostPath:
             path: /proc
         {{- end }}
+{{- end }}
