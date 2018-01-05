@@ -4,7 +4,7 @@ metadata:
   name: node-role-binding
 subjects:
 - kind: ServiceAccount
-  name: {{ quote .Values.px.service-account }}
+  name: {{ quote .Values.serviceAccount }}
   namespace: kube-system
   apiVersion: v1
 roleRef:
