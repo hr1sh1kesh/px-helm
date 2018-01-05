@@ -1,10 +1,6 @@
 #Only if Zerostorage is true. 
 {{- if (.Values.installOptions.zeroStorage) and (eq .Values.installOptions.zeroStorage true)}}
 #Setting defaults if they are omitted.
-{{ .Values.installOptions.runOnMaster | default false}}
-{{ .Values.installOptions.zeroStorage | default false}}
-{{ .Values.installOptions.usefileSystemDrive | default false}}
-
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -65,9 +61,9 @@ spec:
           {{- with .Values.installOptions }}
             [
               "-k", 
-              "{{ required .etcdEndpoint }}", 
+              "{{ required "A valid ETCD url in the format etcd:http://<your-etcd-endpoint>:2379 is required" .etcdEndpoint }}", 
               "-c", 
-              "{{ required .clusterName }}", 
+              "{{ required "Clustername cannot be empty" .clusterName }}", 
 
               {{- if .dataInterface }}
               "-d",

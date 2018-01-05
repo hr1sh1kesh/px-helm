@@ -1,12 +1,13 @@
 #Setting defaults if they are omitted. 
+{{ $runOnMaster := .Values.installOptions.runOnMaster | default false }}
+{{ $zeroStorage := .Values.installOptions.zeroStorage | default false }}
+{{ $usefileSystemDrive := .Values.installOptions.usefileSystemDrive | default false }}
+
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: portworx
   namespace: kube-system
-{{ $runOnMaster := .Values.installOptions.runOnMaster | default false }}
-{{ $zeroStorage := .Values.installOptions.zeroStorage | default false }}
-{{ $usefileSystemDrive := .Values.installOptions.usefileSystemDrive | default false }}
 spec:
   minReadySeconds: 0
   {{- if eq (.Values.deploymentType | upper | lower) "oci" }}
