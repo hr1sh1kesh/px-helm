@@ -38,7 +38,7 @@ spec:
       labels:
         app:  portworx-zerostorage
         name: portworx
-# {{ template "px.labels" . }}  
+        # {{- include "px.labels" . | indent 8 }}  
       namespace: kube-system
     spec:
       tolerations:

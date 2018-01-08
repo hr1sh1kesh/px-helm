@@ -36,7 +36,7 @@ spec:
       labels:
         app: portworx
         name: portworx
-# {{ template "px.labels" . }}  
+        # {{- include "px.labels" . | indent 8 }}  
       namespace: kube-system
     spec:
       affinity:

@@ -11,7 +11,7 @@
 
 
 {{- define "px.labels" -}}
-        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-        heritage: {{ .Release.Service | quote }}
-        release: {{ .Release.Name | quote }}
+chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+heritage: {{ .Release.Service | quote }}
+release: {{ .Release.Name | quote }}
 {{- end -}}

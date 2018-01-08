@@ -52,7 +52,7 @@ spec:
       labels:
         name: portworx-pvc-controller
         tier: control-plane
-# {{ template "px.labels" . }}  
+        # {{- include "px.labels" . | indent 8 }}  
     spec:
       containers:
       - command:
