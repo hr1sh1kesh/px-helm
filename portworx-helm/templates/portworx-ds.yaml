@@ -133,6 +133,14 @@ spec:
           env:
             - name: "PX_TEMPLATE_VERSION"
               value: "v2"
+            # - name: "PX_HTTP_PROXY"
+            #   value: ""  
+            # - name: "PX_HTTPS_PROXY"
+            #   value: ""  
+            # - name: "PX_ENABLE_CACHE_FLUSH"
+            #   value: ""  
+            # - name: "PX_ENABLE_NFS"
+            #   value: ""  
           livenessProbe:
             periodSeconds: 30
             initialDelaySeconds: 840 # allow image pull in slow networks

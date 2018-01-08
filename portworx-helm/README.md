@@ -15,9 +15,12 @@ This chart deploys Portworx to all nodes in your cluster via a DaemonSet.
 
 To install the chart with the release name `my-release` run:
 
-```bash
+Clone the repository. 
+cd into the root directory
+
+```
 $ helm install --name my-release \
-    --set datadog.apiKey=YOUR-KEY-HERE stable/datadog
+    --set imageVersion=1.2.12.0 .
 ```
 
 ## Uninstalling the Chart
