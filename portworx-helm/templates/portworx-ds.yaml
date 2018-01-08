@@ -3,6 +3,9 @@
 {{ $zeroStorage := .Values.installOptions.zeroStorage | default false }}
 {{ $usefileSystemDrive := .Values.installOptions.usefileSystemDrive | default false }}
 {{ $drives := .Values.installOptions.drives | default "none" }}
+{{ $dataInterface := .Values.installOptions.dataInterface | default "none" }}
+{{ $managementInterface := .Values.installOptions.managementInterface | default "none" }}
+
 {{ $lighthouseToken := .Values.installOptions.lighthouse.token | default "none" }}
 {{ $lighthouseEnvVars := .Values.installOptions.lighthouse.envVars | default "none" }}
 
@@ -10,7 +13,7 @@
 {{ $etcdCA := .Values.installOptions.etcd.ca | default "none" }}
 {{ $etcdCert := .Values.installOptions.etcd.cert | default "none" }}
 {{ $etcdKey := .Values.installOptions.etcd.key | default "none" }}
-{{ $etcdACL := .Values.installOptions.etcd.acl | default "none" }}
+{{- $etcdACL := .Values.installOptions.etcd.acl | default "none" -}}
 
 apiVersion: extensions/v1beta1
 kind: DaemonSet
@@ -33,6 +36,7 @@ spec:
       labels:
         app: portworx
         name: portworx
+# {{ template "px.labels" . }}  
       namespace: kube-system
     spec:
       affinity:
@@ -66,7 +70,8 @@ spec:
           {{- with .Values.installOptions }}
             [
               {{- if eq $drives "none"  }}
-              "-A",
+              "-a",
+              "-f",
               {{- else }}
               "-s",
               "{{ .drives }}",
@@ -81,14 +86,14 @@ spec:
               "-c", 
               "{{ required "Clustername cannot be empty" .clusterName }}", 
 
-              {{- if .dataInterface }}
+              {{- if not (eq $dataInterface "none") }}
               "-d",
-              "{{ .dataInterface }}",
+              "{{ $dataInterface }}",
               {{- end }}
 
-              {{- if .managementInterface }}
+              {{- if not (eq $managementInterface "none") }}
               "-m",
-              "{{ .managementInterface }}",
+              "{{ $managementInterface }}",
               {{- end }}
 
               {{- if not (eq $lighthouseToken "none") }}
