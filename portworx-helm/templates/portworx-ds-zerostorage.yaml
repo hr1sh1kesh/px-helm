@@ -1,6 +1,15 @@
 #Only if Zerostorage is true. 
 {{- if (.Values.installOptions.zeroStorage) and (eq .Values.installOptions.zeroStorage true)}}
+
 #Setting defaults if they are omitted.
+{{ $lighthouseToken := .Values.installOptions.lighthouse.token | default "none" }}
+{{ $lighthouseEnvVars := .Values.installOptions.lighthouse.envVars | default "none" }}
+{{ $etcdCredentials := .Values.installOptions.etcd.credentials | default "none:none" }}
+{{ $etcdCA := .Values.installOptions.etcd.ca | default "none" }}
+{{ $etcdCert := .Values.installOptions.etcd.cert | default "none" }}
+{{ $etcdKey := .Values.installOptions.etcd.key | default "none" }}
+{{ $etcdACL := .Values.installOptions.etcd.acl | default "none" }}
+
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -75,9 +84,39 @@ spec:
               "{{ .managementInterface }}",
               {{- end }}
 
-              "-z",
+              {{- if not (eq $lighthouseToken "none") }}
+              "-t",
+              "{{ $lighthouseToken }}",
+              {{- end }}
+
+              {{- if not (eq $etcdCredentials "none:none") }}
+              "-userpwd",
+              "{{ $etcdCredentials }}",
+              {{- end }}
+
+              {{- if not (eq $etcdCA "none") }}
+              "-ca",
+              "{{ $etcdCA }}",
+              {{- end }}
+
+              {{- if not (eq $etcdCert "none") }}
+              "-cert",
+              "{{ $etcdCert }}",
+              {{- end }}
+
+              {{- if not (eq $etcdKey "none") }}
+              "-key",
+              "{{ $etcdKey }}",
+              {{- end }}              
+
+              {{- if not (eq $etcdACL "none") }}
+              "-acltoken",
+              "{{ $etcdACL }}",
+              {{- end }}              
+
               "-x",
-              "kubernetes"
+              "kubernetes",
+              "-z"
              ]
   
           {{- end }}   

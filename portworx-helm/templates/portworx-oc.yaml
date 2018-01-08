@@ -1,5 +1,4 @@
-# SOURCE: http://install.portworx.com/?type=oci&c=test_cluster&k=etcd:http://etc.fake.net:2379&osft=true
-{{- if (.Values.installOptions.openshiftInstall) and (eq .Values.installOptions.openshiftInstall true)}}
+{{- if (.Values.openshiftInstall) and (eq .Values.openshiftInstall true)}}
 
 apiVersion: v1
 kind: ServiceAccount
@@ -8,7 +7,7 @@ metadata:
   namespace: kube-system
 ---
 kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: {{ template "rbac.apiVersion" . }}
 metadata:
    name: portworx-pvc-controller-role
 rules:
@@ -17,7 +16,7 @@ rules:
   verbs: ["*"]
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: {{ template "rbac.apiVersion" . }}
 metadata:
   name: portworx-pvc-controller-role-binding
 subjects:
