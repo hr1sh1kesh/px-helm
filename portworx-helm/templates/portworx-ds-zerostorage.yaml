@@ -2,17 +2,17 @@
 {{- if (.Values.installOptions.zeroStorage) and (eq .Values.installOptions.zeroStorage true) -}}
 
 #Setting defaults if they are omitted.
-{{- $dataInterface := .Values.installOptions.dataInterface | default "none" -}}
-{{- $managementInterface := .Values.installOptions.managementInterface | default "none" -}}
+{{- $dataInterface := .Values.installOptions.dataInterface | default "none" }}
+{{- $managementInterface := .Values.installOptions.managementInterface | default "none" }}
 
-{{- $lighthouseToken := .Values.installOptions.lighthouse.token | default "none" -}}
-{{- $lighthouseEnvVars := .Values.installOptions.lighthouse.envVars | default "none" -}}
+{{- $lighthouseToken := .Values.installOptions.lighthouse.token | default "none" }}
+{{- $lighthouseEnvVars := .Values.installOptions.lighthouse.envVars | default "none" }}
 
-{{- $etcdCredentials := .Values.installOptions.etcd.credentials | default "none:none" -}}
-{{- $etcdCA := .Values.installOptions.etcd.ca | default "none" -}}
-{{- $etcdCert := .Values.installOptions.etcd.cert | default "none" -}}
-{{- $etcdKey := .Values.installOptions.etcd.key | default "none" -}}
-{{- $etcdACL := .Values.installOptions.etcd.acl | default "none" -}}
+{{- $etcdCredentials := .Values.installOptions.etcd.credentials | default "none:none" }}
+{{- $etcdCA := .Values.installOptions.etcd.ca | default "none" }}
+{{- $etcdCert := .Values.installOptions.etcd.cert | default "none" }}
+{{- $etcdKey := .Values.installOptions.etcd.key | default "none" }}
+{{- $etcdACL := .Values.installOptions.etcd.acl | default "none" }}
 
 apiVersion: extensions/v1beta1
 kind: DaemonSet
