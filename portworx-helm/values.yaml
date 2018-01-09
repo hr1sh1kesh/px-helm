@@ -10,8 +10,9 @@
     etcdEndpoint: etcd:http://<your-etcd-endpoint>:2379                       # The ETCD endpoint. Should be in the format etcd:http://<your-etcd-endpoint>:2379
     clusterName: mycluster                # This is the default. please change it to your cluster name.  
     runOnMaster: false                    # Instructs Portworx to be run on the kubernetes master as well. Defaults to false.  
-    zeroStorage: false                     # true/false Instructs PX to run in Zero Storage mode. 
+    zeroStorage: false                    # true/false Instructs PX to run in Zero Storage mode. 
     usefileSystemDrive: false             # true/false Instructs PX to use an unmounted Drive even if it has a filesystem.
+    usedrivesAndPartitions: false         # Defaults to false. Change to true and PX will use unmounted drives and partitions. 
     kubernetesVersion: 1.7.8              # Defaults to 1.7.8
     secretType: none                      # Defaults to None, but can be AWS / KVDB / Vault.
     drives: none                          # Defaults to use -A switch. 

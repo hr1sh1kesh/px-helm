@@ -3,6 +3,8 @@
 {{ $zeroStorage := .Values.installOptions.zeroStorage | default false }}
 {{ $usefileSystemDrive := .Values.installOptions.usefileSystemDrive | default false }}
 {{ $drives := .Values.installOptions.drives | default "none" }}
+{{ $usedrivesAndPartitions := .Values.installOptions.usedrivesAndPartitions | default false }}
+
 {{ $dataInterface := .Values.installOptions.dataInterface | default "none" }}
 {{ $managementInterface := .Values.installOptions.managementInterface | default "none" }}
 
@@ -75,11 +77,13 @@ spec:
               {{- else }}
               "-s",
               "{{ .drives }}",
-              {{- end }}
+              {{- end -}}
 
-              {{- if eq $usefileSystemDrive true }}
-              "-f",               
-              {{- end }}              
+              {{- if eq $usedrivesAndPartitions true }}
+                {{- if not (eq $drives "none")}}
+              "-A",
+                {{- end -}}
+              {{- end -}}              
 
               "-k", 
               "{{ required "A valid ETCD url in the format etcd:http://<your-etcd-endpoint>:2379 is required" .etcdEndpoint }}", 
@@ -89,42 +93,42 @@ spec:
               {{- if not (eq $dataInterface "none") }}
               "-d",
               "{{ $dataInterface }}",
-              {{- end }}
+              {{- end -}}
 
               {{- if not (eq $managementInterface "none") }}
               "-m",
               "{{ $managementInterface }}",
-              {{- end }}
+              {{- end -}}
 
               {{- if not (eq $lighthouseToken "none") }}
               "-t",
               "{{ $lighthouseToken }}",
-              {{- end }}
+              {{- end -}}
 
               {{- if not (eq $etcdCredentials "none:none") }}
               "-userpwd",
               "{{ $etcdCredentials }}",
-              {{- end }}
+              {{- end -}}
 
               {{- if not (eq $etcdCA "none") }}
               "-ca",
               "{{ $etcdCA }}",
-              {{- end }}
+              {{- end -}}
 
               {{- if not (eq $etcdCert "none") }}
               "-cert",
               "{{ $etcdCert }}",
-              {{- end }}
+              {{- end -}}
 
               {{- if not (eq $etcdKey "none") }}
               "-key",
               "{{ $etcdKey }}",
-              {{- end }}              
+              {{- end -}}              
 
               {{- if not (eq $etcdACL "none") }}
               "-acltoken",
               "{{ $etcdACL }}",
-              {{- end }}              
+              {{- end -}}              
 
               "-x",
               "kubernetes"
