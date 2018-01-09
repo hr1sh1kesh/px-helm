@@ -1,5 +1,4 @@
 {{- if (.Values.openshiftInstall) and (eq .Values.openshiftInstall true)}}
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -11,9 +10,45 @@ apiVersion: {{ template "rbac.apiVersion" . }}
 metadata:
    name: portworx-pvc-controller-role
 rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["persistentvolumes"]
+  verbs: ["create","delete","get","list","update","watch"]
+- apiGroups: [""]
+  resources: ["persistentvolumes/status"]
+  verbs: ["update"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: ["get", "list", "update", "watch"]
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims/status"]
+  verbs: ["update"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create", "delete", "get", "list", "watch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["endpoints", "services"]
+  verbs: ["create", "delete", "get"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["watch"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch", "update"]
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: ["get"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "create", "update"]
 ---
 kind: ClusterRoleBinding
 apiVersion: {{ template "rbac.apiVersion" . }}
@@ -23,7 +58,6 @@ subjects:
 - kind: ServiceAccount
   name: portworx-pvc-controller-account
   namespace: kube-system
-  apiVersion: v1
 roleRef:
   kind: ClusterRole
   name: portworx-pvc-controller-role
@@ -62,7 +96,7 @@ spec:
         - --controllers=persistentvolume-binder
         - --use-service-account-credentials=true
         - --leader-elect-resource-lock=configmaps
-        image: gcr.io/google_containers/kube-controller-manager-amd64:v{{ .Values.installOptions.kubernetesVersion }}
+        image: gcr.io/google_containers/kube-controller-manager-amd64:{{ .Capabilities.KubeVersion.GitVersion }}
         livenessProbe:
           failureThreshold: 8
           httpGet:
