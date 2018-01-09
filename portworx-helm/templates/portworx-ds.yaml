@@ -85,7 +85,7 @@ spec:
               {{- end -}}
 
               {{- if eq $usedrivesAndPartitions true }}
-                {{- if not (eq $drives "none")}}
+                {{- if eq $drives "none" }}
               "-A",
                 {{- end -}}
               {{- end -}}              
