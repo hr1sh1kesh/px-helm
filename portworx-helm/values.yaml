@@ -2,7 +2,8 @@
 
   serviceAccount: px-account
   deploymentType: oci                     # Either OCI / Docker. Defaults to OCI
-  imageVersion: latest                  # Version of the PX Image. 
+  imageType: none                              # 
+  imageVersion: latest                    # Version of the PX Image. 
   openshiftInstall: false                 # Defaults to false for installing Portworx on Openshift .
   isTargetOSCoreOS: false                 # Is your target OS CoreOS? Defaults to false.
 
