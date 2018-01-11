@@ -80,8 +80,11 @@ spec:
               "-a",
               "-f",
               {{- else }}
-              "-s",
-              "{{ .drives }}",
+              {{ $driveNames := .drives | split "," }}
+              {{- range $index, $name := $driveNames }}
+              "-s", 
+              {{ $name }},
+              {{- end -}}
               {{- end -}}
 
               {{- if eq $usedrivesAndPartitions true }}

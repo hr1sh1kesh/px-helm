@@ -15,3 +15,8 @@ chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 heritage: {{ .Release.Service | quote }}
 release: {{ .Release.Name | quote }}
 {{- end -}}
+
+{{- define "driveOpts" }}
+{{ $v := .Values.installOptions.drives | split "," }}
+{{$v._0}}
+{{- end -}}
