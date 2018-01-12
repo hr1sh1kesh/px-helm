@@ -1,13 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
-#set -x
+set -x
 echo "Initializing..."
-
 svcname=$1
-# echo $svcname
-IFS=':' read -r id etcdURL <<< "$svcname"
+echo $svcname
+etcdURL=$(echo "$svcname" | awk -F: '{ st = index($0,":");print substr($0,st+1)}')
 echo $etcdURL
+
 response=$(curl --write-out %{http_code} --silent --output /dev/null "$etcdURL/version")
+echo $response
 
 if [[ "$response" != 200 ]]
 then
