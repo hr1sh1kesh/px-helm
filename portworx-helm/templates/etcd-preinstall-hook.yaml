@@ -9,16 +9,15 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded, hook-failed
 spec:
-  activeDeadlineSeconds: 30
-  backofflimit: 2    
+  backoffLimit: 2
   template:
     spec:
       restartPolicy: Never
       containers:
       - name: pre-install-job
-        imagePullPolicy : Always
+        imagePullPolicy: Always
         image: "hrishi/px-etcd-preinstall-hook:v1"
         command: ['/bin/sh']
-        args: ['/usr/bin/etcdStatus.sh',{{ .Values.installOptions.etcdEndPoint }}]
+        args: ['/usr/bin/etcdStatus.sh',"{{ .Values.installOptions.etcdEndPoint }}"]
