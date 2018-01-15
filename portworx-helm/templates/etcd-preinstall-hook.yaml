@@ -20,4 +20,4 @@ spec:
         imagePullPolicy: Always
         image: "hrishi/px-etcd-preinstall-hook:v1"
         command: ['/bin/sh']
-        args: ['/usr/bin/etcdStatus.sh',"{{ .Values.installOptions.etcdEndPoint }}"]
+        args: ['/usr/bin/etcdStatus.sh',"{{ .Values.etcdEndPoint }}"]

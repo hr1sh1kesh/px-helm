@@ -1,24 +1,22 @@
 #Setting defaults if they are omitted. 
-{{- $runOnMaster := .Values.installOptions.runOnMaster | default false }}
-{{- $zeroStorage := .Values.installOptions.zeroStorage | default false }}
-{{- $usefileSystemDrive := .Values.installOptions.usefileSystemDrive | default false }}
-{{- $drives := .Values.installOptions.drives | default "none" }}
-{{- $usedrivesAndPartitions := .Values.installOptions.usedrivesAndPartitions | default false }}
-{{- $secretType := .Values.installOptions.secretType | default "none" }}
+{{- $runOnMaster := .Values.runOnMaster | default false }}
+{{- $zeroStorage := .Values.zeroStorage | default false }}
+{{- $usefileSystemDrive := .Values.usefileSystemDrive | default false }}
+{{- $drives := .Values.drives | default "none" }}
+{{- $usedrivesAndPartitions := .Values.usedrivesAndPartitions | default false }}
+{{- $secretType := .Values.secretType | default "none" }}
 
-{{- $dataInterface := .Values.installOptions.dataInterface | default "none" }}
-{{- $managementInterface := .Values.installOptions.managementInterface | default "none" }}
+{{- $dataInterface := .Values.dataInterface | default "none" }}
+{{- $managementInterface := .Values.managementInterface | default "none" }}
 
-{{- $lighthouseToken := .Values.installOptions.lighthouse.token | default "none" }}
-{{- $lighthouseEnvVars := .Values.installOptions.lighthouse.envVars | default "none" }}
+{{- $lighthouseToken := .Values.lighthouse.token | default "none" }}
+{{- $lighthouseEnvVars := .Values.lighthouse.envVars | default "none" }}
 
-{{- $etcdCredentials := .Values.installOptions.etcd.credentials | default "none:none" }}
-{{- $etcdCA := .Values.installOptions.etcd.ca | default "none" }}
-{{- $etcdCert := .Values.installOptions.etcd.cert | default "none" }}
-{{- $etcdKey := .Values.installOptions.etcd.key | default "none" }}
-{{- $etcdACL := .Values.installOptions.etcd.acl | default "none" }}
-
-
+{{- $etcdCredentials := .Values.etcd.credentials | default "none:none" }}
+{{- $etcdCA := .Values.etcd.ca | default "none" }}
+{{- $etcdCert := .Values.etcd.cert | default "none" }}
+{{- $etcdKey := .Values.etcd.key | default "none" }}
+{{- $etcdACL := .Values.etcd.acl | default "none" }}
 apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
@@ -74,7 +72,7 @@ spec:
           terminationMessagePath: "/tmp/px-termination-log"
           imagePullPolicy: Always
           args:
-          {{- with .Values.installOptions }}
+          {{- with .Values }}
             [
               {{- if eq $drives "none"  }}
               "-a",

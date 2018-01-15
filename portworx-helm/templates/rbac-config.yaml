@@ -1,10 +1,12 @@
+
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ quote .Values.serviceAccount }}
+  name: px-account
   namespace: kube-system
 ---  
+
 kind: ClusterRole
 apiVersion: {{ template "rbac.apiVersion" . }}
 metadata:
@@ -20,13 +22,14 @@ rules:
   resources: ["persistentvolumeclaims"]
   verbs: ["get", "list"]
 ---
+
 kind: ClusterRoleBinding
 apiVersion: {{ template "rbac.apiVersion" . }}
 metadata:
   name: node-role-binding
 subjects:
 - kind: ServiceAccount
-  name: {{ quote .Values.serviceAccount }}
+  name: px-account
   namespace: kube-system
 roleRef:
   kind: ClusterRole

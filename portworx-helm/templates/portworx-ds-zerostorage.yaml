@@ -1,18 +1,18 @@
 #Only if Zerostorage is true. 
-{{- if (.Values.installOptions.zeroStorage) and (eq .Values.installOptions.zeroStorage true) -}}
+{{- if (.Values.zeroStorage) and (eq .Values.zeroStorage true) -}}
 
 #Setting defaults if they are omitted.
-{{- $dataInterface := .Values.installOptions.dataInterface | default "none" }}
-{{- $managementInterface := .Values.installOptions.managementInterface | default "none" }}
+{{- $dataInterface := .Values.dataInterface | default "none" }}
+{{- $managementInterface := .Values.managementInterface | default "none" }}
 
-{{- $lighthouseToken := .Values.installOptions.lighthouse.token | default "none" }}
-{{- $lighthouseEnvVars := .Values.installOptions.lighthouse.envVars | default "none" }}
+{{- $lighthouseToken := .Values.lighthouse.token | default "none" }}
+{{- $lighthouseEnvVars := .Values.lighthouse.envVars | default "none" }}
 
-{{- $etcdCredentials := .Values.installOptions.etcd.credentials | default "none:none" }}
-{{- $etcdCA := .Values.installOptions.etcd.ca | default "none" }}
-{{- $etcdCert := .Values.installOptions.etcd.cert | default "none" }}
-{{- $etcdKey := .Values.installOptions.etcd.key | default "none" }}
-{{- $etcdACL := .Values.installOptions.etcd.acl | default "none" }}
+{{- $etcdCredentials := .Values.etcd.credentials | default "none:none" }}
+{{- $etcdCA := .Values.etcd.ca | default "none" }}
+{{- $etcdCert := .Values.etcd.cert | default "none" }}
+{{- $etcdKey := .Values.etcd.key | default "none" }}
+{{- $etcdACL := .Values.etcd.acl | default "none" }}
 
 apiVersion: extensions/v1beta1
 kind: DaemonSet
@@ -72,7 +72,7 @@ spec:
           imagePullPolicy: Always
           args:
   
-          {{- with .Values.installOptions }}
+          {{- with .Values }}
             [
               "-k", 
               "{{ required "A valid ETCD url in the format etcd:http://<your-etcd-endpoint>:2379 is required" .etcdEndPoint }}", 
