@@ -17,6 +17,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: pre-install-job
+        terminationMessagePath: "/tmp/preinstall-termination-log"      
         imagePullPolicy: Always
         image: "hrishi/px-etcd-preinstall-hook:v1"
         command: ['/bin/sh']

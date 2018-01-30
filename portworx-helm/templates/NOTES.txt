@@ -1,4 +1,5 @@
-Your Release is named {{ .Release.name }}
+
+Your Release is named {{ .Release.Name | quote }}
 Portworx Pods should be running on each node in your cluster.
 
 After a few minutes, you should be able to query the status of your Portworx cluster by logging into one of the nodes and issuing the command

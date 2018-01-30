@@ -12,6 +12,6 @@ echo $response
 
 if [[ "$response" != 200 ]]
 then
-    echo "Provided etcd url is not reachable. Exiting.."
+    echo "Provided etcd url is not reachable. Exiting.." > /dev/termination-log
     exit 1
 fi 
