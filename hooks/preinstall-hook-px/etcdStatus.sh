@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -x
+# set -x
 echo "Initializing..."
 svcname=$1
 echo $svcname

@@ -10,7 +10,7 @@
 {{- $managementInterface := .Values.managementInterface | default "none" }}
 
 {{- $lighthouseToken := .Values.lighthouse.token | default "none" }}
-{{- $lighthouseEnvVars := .Values.lighthouse.envVars | default "none" }}
+{{- $envVars := .Values.envVars | default "none" }}
 
 {{- $etcdCredentials := .Values.etcd.credentials | default "none:none" }}
 {{- $etcdCA := .Values.etcd.ca | default "none" }}
@@ -148,14 +148,14 @@ spec:
           env:
             - name: "PX_TEMPLATE_VERSION"
               value: "v2"
-            # - name: "PX_HTTP_PROXY"
-            #   value: ""  
-            # - name: "PX_HTTPS_PROXY"
-            #   value: ""  
-            # - name: "PX_ENABLE_CACHE_FLUSH"
-            #   value: ""  
-            # - name: "PX_ENABLE_NFS"
-            #   value: ""  
+              
+              {{- if not (eq $envVars "none") }}
+              {{ $vars := $envVars | split "," }}
+              {{- range $name, $val := $vars }}
+            - name: {{ $name }}
+              value: {{ $val }}
+              {{- end -}}              
+
           livenessProbe:
             periodSeconds: 30
             initialDelaySeconds: 840 # allow image pull in slow networks

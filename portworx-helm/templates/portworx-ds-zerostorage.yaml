@@ -6,7 +6,7 @@
 {{- $managementInterface := .Values.managementInterface | default "none" }}
 
 {{- $lighthouseToken := .Values.lighthouse.token | default "none" }}
-{{- $lighthouseEnvVars := .Values.lighthouse.envVars | default "none" }}
+{{- $envVars := .Values.envVars | default "none" }}
 
 {{- $etcdCredentials := .Values.etcd.credentials | default "none:none" }}
 {{- $etcdCA := .Values.etcd.ca | default "none" }}

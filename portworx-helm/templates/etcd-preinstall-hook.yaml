@@ -11,13 +11,14 @@ metadata:
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded, hook-failed
 spec:
-  backoffLimit: 2
+  backoffLimit: 1
   template:
     spec:
       restartPolicy: Never
       containers:
       - name: pre-install-job
-        terminationMessagePath: "/tmp/preinstall-termination-log"      
+        terminationMessagePath: '/dev/termination-log'    
+        terminationMessagePolicy: 'FallbackToLogsOnError'        
         imagePullPolicy: Always
         image: "hrishi/px-etcd-preinstall-hook:v1"
         command: ['/bin/sh']
