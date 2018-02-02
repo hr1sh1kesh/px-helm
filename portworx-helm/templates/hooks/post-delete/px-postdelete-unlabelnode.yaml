@@ -1,26 +1,28 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: px-predelete-hook
+  namespace: kube-system
+  name: px-postdelete-hook
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
   annotations:
-    "helm.sh/hook": pre-delete
+    "helm.sh/hook": post-delete
     "helm.sh/hook-weight": "-5"
-    "helm.sh/hook-delete-policy": hook-succeeded, hook-failed
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   backoffLimit: 1
   template:
     spec:
+      serviceAccountName: px-delete-account
       restartPolicy: OnFailure
       volumes:
       - name: kubectl
         hostPath:
           path: /usr/bin/kubectl
       containers:
-      - name: pre-delete-job
+      - name: post-delete-job
         image: "lachlanevenson/k8s-kubectl:{{ .Capabilities.KubeVersion.GitVersion }}"
         volumeMounts:
         - name: kubectl
@@ -28,4 +30,4 @@ spec:
         command:
         - sh
         - -c
-        - "kubectl label nodes --all px/enabled=remove"
+        - "kubectl label nodes --all px/enabled-"

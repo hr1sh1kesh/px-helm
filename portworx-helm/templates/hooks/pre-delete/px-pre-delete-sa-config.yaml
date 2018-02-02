@@ -1,31 +1,31 @@
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: px-delete-cm
   namespace: kube-system
+  name: px-predelete-cm
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-15"
 data:
   px-delete-account-sa.yaml: |
     apiVersion: v1
     kind: ServiceAccount
     metadata:
-      name: px-account
+      name: px-delete-account
       namespace: kube-system
   px-delete-cr.yaml: |  
     kind: ClusterRole
     apiVersion: {{ template "rbac.apiVersion" . }}
     metadata:
-      name: node-get-put-list-role
+      name: px-delete-nodelabel-role
     rules:
     - apiGroups: [""]
       resources: ["nodes"]
       verbs: ["watch", "get", "update", "list", "patch"]
-    - apiGroups: [""]
-      resources: ["pods"]
-      verbs: ["get", "list"]
-    - apiGroups: [""]
-      resources: ["persistentvolumeclaims"]
-      verbs: ["get", "list"]
   px-delete-crb.yaml: |
     kind: ClusterRoleBinding
     apiVersion: {{ template "rbac.apiVersion" . }}
@@ -33,9 +33,9 @@ data:
       name: node-role-binding
     subjects:
     - kind: ServiceAccount
-      name: px-account
+      name: px-delete-account
       namespace: kube-system
     roleRef:
       kind: ClusterRole
-      name: node-get-put-list-role
+      name: px-delete-nodelabel-role
       apiGroup: rbac.authorization.k8s.io
