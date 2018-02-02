@@ -15,7 +15,7 @@ spec:
   backoffLimit: 1
   template:
     spec:
-      serviceAccountName: px-delete-account
+      serviceAccountName: tiller
       restartPolicy: OnFailure
       volumes:
       - name: kubectl
