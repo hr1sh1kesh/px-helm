@@ -94,7 +94,6 @@ subjects:
 - kind: ServiceAccount
   name: stork-account
   namespace: kube-system
-  apiVersion: v1
 roleRef:
   kind: ClusterRole
   name: stork-role
@@ -231,7 +230,6 @@ subjects:
 - kind: ServiceAccount
   name: stork-scheduler-account
   namespace: kube-system
-  apiVersion: v1
 roleRef:
   kind: ClusterRole
   name: stork-scheduler-role
