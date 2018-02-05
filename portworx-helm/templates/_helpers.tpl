@@ -21,6 +21,6 @@ release: {{ .Release.Name | quote }}
 {{$v._0}}
 {{- end -}}
 
-{{- define "px.kubernetesVersion" }}
+{{- define "px.kubernetesVersion" -}}
 {{ $version := .Capabilities.KubeVersion.GitVersion | split "+" }}{{ $version._0 }}
 {{- end -}}

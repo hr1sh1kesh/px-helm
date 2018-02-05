@@ -260,7 +260,7 @@ spec:
         - --scheduler-name=stork
         - --policy-configmap=stork-config
         - --lock-object-name=stork-scheduler
-        image: gcr.io/google_containers/kube-scheduler-amd64:{{ .Capabilities.KubeVersion.GitVersion }}
+        image: gcr.io/google_containers/kube-scheduler-amd64:{{ $version := .Capabilities.KubeVersion.GitVersion | split "+" }}{{ $version._0 }}
         livenessProbe:
           httpGet:
             path: /healthz
