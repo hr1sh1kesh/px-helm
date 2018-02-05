@@ -1,6 +1,4 @@
 #Setting defaults if they are omitted. 
-{{- $runOnMaster := .Values.runOnMaster | default false }}
-{{- $zeroStorage := .Values.zeroStorage | default false }}
 {{- $usefileSystemDrive := .Values.usefileSystemDrive | default false }}
 {{- $drives := .Values.drives | default "none" }}
 {{- $usedrivesAndPartitions := .Values.usedrivesAndPartitions | default false }}
@@ -9,7 +7,6 @@
 {{- $dataInterface := .Values.dataInterface | default "none" }}
 {{- $managementInterface := .Values.managementInterface | default "none" }}
 
-{{- $lighthouseToken := .Values.lighthouse.token | default "none" }}
 {{- $envVars := .Values.envVars | default "none" }}
 
 {{- $etcdCredentials := .Values.etcd.credentials | default "none:none" }}
@@ -46,13 +43,13 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-            {{- if eq $runOnMaster false }}
+              {{- if (.Values.openshiftInstall) and (eq .Values.openshiftInstall true)}}
+              - key: openshift-infra
+                operator: DoesNotExist
+              {{- else }}
               - key: node-role.kubernetes.io/master
                 operator: DoesNotExist
-            {{- else if (eq $runOnMaster true) and (eq $zeroStorage true) }}
-              - key: node-role.kubernetes.io/master
-                operator: DoesNotExist
-            {{- end }}
+              {{- end }}
               - key: px/enabled
                 operator: NotIn
                 values:
@@ -109,11 +106,6 @@ spec:
               {{- if not (eq $managementInterface "none") }}
               "-m",
               "{{ $managementInterface }}",
-              {{- end -}}
-
-              {{- if not (eq $lighthouseToken "none") }}
-              "-t",
-              "{{ $lighthouseToken }}",
               {{- end -}}
 
               {{- if not (eq $etcdCredentials "none:none") }}

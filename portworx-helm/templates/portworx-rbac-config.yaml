@@ -14,7 +14,7 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["nodes"]
-  verbs: ["watch", "get", "update", "list", "patch"]
+  verbs: ["watch", "get", "update", "list"]
 - apiGroups: [""]
   resources: ["pods"]
   verbs: ["get", "list"]
