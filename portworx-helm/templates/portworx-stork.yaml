@@ -1,3 +1,4 @@
+{{- if (.Values.stork) and (eq .Values.stork true)}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -287,3 +288,4 @@ spec:
               topologyKey: "kubernetes.io/hostname"
       hostPID: false
       serviceAccountName: stork-scheduler-account
+{{- end }}
