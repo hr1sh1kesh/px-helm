@@ -5,7 +5,7 @@ echo "Initializing..."
 
 svcname="portworx-service.kube-system.svc.cluster.local"
 
-timeout=180
+timeout=420
 
 pxClusterStatus=$(curl -XGET http://$svcname:9001/v1/cluster/enumerate)
 echo $pxClusterStatus
