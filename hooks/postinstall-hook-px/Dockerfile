@@ -9,3 +9,4 @@ RUN apk update \
 
 COPY pxStatus.sh /usr/bin
 
+ENTRYPOINT [ "pxStatus.sh" ]

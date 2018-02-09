@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: kube-system
+  name: px-postinstall-status
+  labels:
+    heritage: {{.Release.Service | quote }}
+    release: {{.Release.Name | quote }}
+    chart: "{{.Chart.Name}}-{{.Chart.Version}}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      serviceAccountName: tiller
+      restartPolicy: OnFailure
+      containers:
+      - name: post-install-status-job
+        terminationMessagePath: '/dev/termination-log'    
+        terminationMessagePolicy: 'FallbackToLogsOnError'        
+        imagePullPolicy: Always
+        image: "hrishi/px-postinstall-status:v1"
