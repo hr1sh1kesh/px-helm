@@ -2,14 +2,14 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: kube-system
-  name: px-predelete-nodelabel
+  name: px-hook-preinstall-cleanJobs
   labels:
     heritage: {{.Release.Service | quote }}
     release: {{.Release.Name | quote }}
     chart: "{{.Chart.Name}}-{{.Chart.Version}}"
   annotations:
-    "helm.sh/hook": pre-delete
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-15"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   backoffLimit: 0
@@ -18,6 +18,6 @@ spec:
       serviceAccountName: tiller
       restartPolicy: Never
       containers:
-      - name: pre-delete-job
+      - name: px-cleanJobs
         image: "lachlanevenson/k8s-kubectl:{{ template "px.kubernetesVersion" . }}"
-        args: ['label','nodes','--all','px/enabled=remove','--overwrite']
+        args: ['get jobs -nkube-system | grep px-hook | awk '{print $1}' | xargs -r kubectl delete -nkube-system jobs']
