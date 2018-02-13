@@ -20,4 +20,5 @@ spec:
       containers:
       - name: px-cleanJobs
         image: "lachlanevenson/k8s-kubectl:{{ template "px.kubernetesVersion" . }}"
-        args: ['get jobs -nkube-system | grep px-hook | awk '{print $1}' | xargs -r kubectl delete -nkube-system jobs']
+        command: ['/bin/sh']
+        args: ['-c','kubectl get jobs -nkube-system | grep px-hook | cut -f1 -d " " | xargs -r kubectl delete -nkube-system jobs']
