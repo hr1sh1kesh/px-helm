@@ -11,9 +11,9 @@ data:
       "kind": "Policy",
       "apiVersion": "v1",
       "predicates": [
-{{ if ge .Capabilities.KubeVersion.Minor "9" -}}
+{{ if lt .Capabilities.KubeVersion.Minor "9" }}
         {"name": "NoVolumeZoneConflict"}, 
-{{ end -}}
+{{ end }}
         {"name": "MaxAzureDiskVolumeCount"},
         {"name": "NoVolumeNodeConflict"},
         {"name": "PodToleratesNodeTaints"},
@@ -147,7 +147,7 @@ spec:
         - --verbose
         - --leader-elect=true
         imagePullPolicy: Always
-        image: openstorage/stork:1.0
+        image: openstorage/stork:1.0.1
         resources:
           requests:
             cpu: '0.1'
