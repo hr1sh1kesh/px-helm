@@ -7,7 +7,7 @@ etcdURL=$(echo "$svcname" | awk -F: '{ st = index($0,":");print substr($0,st+1)}
 
 echo "Verifying if the provided etcd url is accessible: $etcdURL"
 
-response=$(curl --write-out %{http_code} --silent --output /dev/null "$etcdURL/version")
+response=$(curl --write-out %{http_code} --silent --output /dev/null "http://$etcdURL/version")
 echo "Response Code: $response"
 
 if [[ "$response" != 200 ]]
