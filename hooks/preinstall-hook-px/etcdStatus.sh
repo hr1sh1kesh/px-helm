@@ -3,6 +3,7 @@
 # set -x
 echo "Initializing..."
 svcname=$1
+
 IFS=';' read -ra array <<< "$svcname"
 for url in "${array[@]}"
 do 
